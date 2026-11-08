@@ -10,8 +10,8 @@
 ### Equipo de Desarrollo:
 * **[Apellido, Nombre]** — Legajo: `[12345]` 
 * **[Apellido, Nombre]** — Legajo: `[12345]`
-* **[Apellido, Nombre]** — Legajo: `[12345]`
-* **[Apellido, Nombre]** — Legajo: `[12345]`
+* **Klatt, Tiago David** — Legajo: `27866`
+* **Villalba, Luciano Alberto** — Legajo: `27843`
 
 ---
 
