@@ -79,7 +79,7 @@ void analizar_angulo_reingreso(const ParametrosReingreso *simulacion) {
 
 
 // Función controladora principal que instancia el estado e invoca los cálculos
-void ejecutar_simulacion() {
+ParametrosReingreso ejecutar_simulacion(void) {
     // Función controladora principal que instancia el estado e invoca los cálculos
     ParametrosReingreso simulacion;
     
