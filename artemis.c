@@ -90,3 +90,36 @@ ParametrosReingreso ejecutar_simulacion(void) {
     analizar_angulo_reingreso(&simulacion);
     return simulacion; // Retorna la estructura para registrarla en el historial del main
 }
+
+
+// Reporte final de desempeño: resume los ángulos probados en la sesión (arreglo recibido por puntero)
+void mostrar_reporte_final(const double *hist_angulos, int total) {
+    printf("\n======================================================\n");
+    printf("            REPORTE FINAL DE DESEMPENO\n");
+    printf("======================================================\n");
+
+    if (total == 0) {
+        printf(" No se realizaron simulaciones en esta sesion.\n");
+        printf("======================================================\n");
+        return;
+    }
+
+    double minimo = hist_angulos[0];
+    double maximo = hist_angulos[0];
+    double suma = 0.0;
+    int seguros = 0;
+
+    for (int i = 0; i < total; i++) {
+        double angulo = hist_angulos[i];
+        if (angulo < minimo) minimo = angulo;
+        if (angulo > maximo) maximo = angulo;
+        suma += angulo;
+        if (angulo >= ANG_MIN && angulo <= ANG_MAX) seguros++;
+    }
+
+    printf(" Simulaciones realizadas  : %d\n", total);
+    printf(" Angulo minimo / maximo   : %.2f / %.2f grados\n", minimo, maximo);
+    printf(" Angulo promedio          : %.2f grados\n", suma / total);
+    printf(" Dentro de ventana segura : %d de %d (%.1f%%)\n", seguros, total, 100.0 * seguros / total);
+    printf("======================================================\n");
+}
