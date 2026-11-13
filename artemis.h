@@ -25,5 +25,6 @@ void calcular_desaceleracion_media(const ParametrosReingreso *simulacion);
 void calcular_fuerza_amerizaje(const ParametrosReingreso *simulacion);
 void analizar_angulo_reingreso(const ParametrosReingreso *simulacion);
 ParametrosReingreso ejecutar_simulacion(void); // Retorna la estructura para el historial
+void mostrar_reporte_final(const double *hist_angulos, int total);
 
 #endif
