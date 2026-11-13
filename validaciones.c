@@ -1,6 +1,7 @@
 // Módulo de Validaciones e Interfaz: Funciones dedicadas al ingreso seguro de datos.
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "validaciones.h"
 
 void limpiar_buffer(void) {
