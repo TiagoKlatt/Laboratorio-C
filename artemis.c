@@ -20,7 +20,7 @@ void inicializar_parametros(ParametrosReingreso *simulacion) {
     printf("\n--- Configuracion de Parametros de Reingreso ---\n");
     simulacion->t_freno = leer_flotante("Ingrese duracion de desaceleracion en seg (ej. 400.0): ", 1.0, 10000.0);
     simulacion->hundimiento = leer_flotante("Ingrese hundimiento en el agua en metros (ej. 1.50): ", 0.1, 100.0);
-    simulacion->angulo_reingreso = leer_flotante("Ingrese angulo de reingreso en grados (ej. 6.0): ", 0.0, 90.0);
+    simulacion->angulo = leer_flotante("Ingrese angulo de reingreso en grados (ej. 6.0): ", 0.0, 90.0);
 }
 
 void calcular_trabajo_rozamiento(const ParametrosReingreso *simulacion) {
