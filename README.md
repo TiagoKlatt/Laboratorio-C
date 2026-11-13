@@ -2,7 +2,7 @@
 
 ## Integrantes y Comisión
 
-- **Universidad:** Universidad Tecnológica Nacional - Facultad Regional Resistencia (UTN FRR)
+- **Universidad:** Universidad Tecnológica Nacional - Facultad Regional Resistencia (UTN FRRe)
 - **Carrera:** Ingeniería en Sistemas de Información
 - **Asignatura:** Algoritmos y Estructuras de Datos
 - **Comisión:** K1.4
@@ -13,7 +13,7 @@
 - **Klatt, Tiago David** — Legajo: `27866`
 - **Villalba, Luciano Alberto** — Legajo: `27843`
 - **[Apellido, Nombre]** — Legajo: `12345`
-- **[Apellido, Nombre]** — Legajo: `12345`
+  
 
 ---
 
@@ -25,6 +25,7 @@ A partir de ese trabajo, acordamos utilizar una estructura modular en lenguaje C
 
 A continuación se presenta la arquitectura propuesta, las decisiones técnicas y la organización del equipo para llevar adelante el proyecto.
 
+### Comunicación entre integrantes: El trabajo se planificó y coordinó mediante reuniones por Meet y WhatsApp. Si bien no hubo conflictos mayores, parte del equipo tenía conocimientos muy básicos en Git y en el uso del IDE Visual Studio Code, lo que requirió apoyo mutuo y nivelación. Asimismo, se presentaron dificultades de coordinación de horarios y actividades con 2 de los 5 integrantes.
 ---
 
 ## Enfoque del Proyecto
