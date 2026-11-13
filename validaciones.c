@@ -59,18 +59,35 @@ int leer_entero(const char *mensaje, int min, int max) {
 }
 
 double leer_flotante(const char *mensaje, double min, double max) {
-    double valor;
+    double valor = 0.0;
     int leidos;
+    int valido;
+
     do {
         printf("%s", mensaje);
         leidos = scanf("%lf", &valor);
-        while (getchar() != '\n');
 
-        // Mecanismos de validación de entradas de usuario
-        if (leidos != 1 || valor < min || valor > max) {
-            printf("Error: Ingrese un valor valido entre %.2f y %.2f.\n", min, max);
+        if (leidos == EOF) {
+            printf("\nEntrada finalizada. Cerrando el programa.\n");
+            exit(EXIT_FAILURE);
         }
-    } while (leidos != 1 || valor < min || valor > max);
+
+        if (leidos == 1) {
+            valido = !quedan_caracteres_extra();
+        } else {
+            limpiar_buffer();
+            valido = 0;
+        }
+
+        // isfinite descarta "nan" e "inf", que scanf acepta como números válidos
+        if (valido && (!isfinite(valor) || valor < min || valor > max)) {
+            valido = 0;
+        }
+
+        if (!valido) {
+            printf("Error: ingrese un numero entre %.2f y %.2f (use punto como separador decimal).\n", min, max);
+        }
+    } while (!valido);
 
     return valor;
 }
