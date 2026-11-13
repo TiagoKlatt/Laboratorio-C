@@ -31,54 +31,62 @@ void calcular_trabajo_rozamiento(const ParametrosReingreso *simulacion) {
     
     double w_roz = (ec_fin + ep_fin) - (ec_ini + ep_ini);
     
-    printf("\na. Trabajo total por rozamiento (Wroz): %.2e Joules\n", w_roz);
+    printf("\n\n======================================================\n");
+    printf("         REPORTE DE RESULTADOS - FASE DE REINGRESO    \n");
+    printf("======================================================\n\n");
+    
+    printf(" [1] Trabajo total por rozamiento (Wroz)\n");
+    printf("     -> %.2e Joules\n\n", w_roz);
 }
 
 void calcular_desaceleracion_media(const ParametrosReingreso *simulacion) {
     double decel = fabs((simulacion->vel_para - simulacion->vel_ini) / simulacion->t_freno);
     double decel_g = decel / GRAVEDAD;
     
-    printf("b. Desaceleracion media: %.2f m/s^2  (%.2f g)\n", decel, decel_g);
+    printf(" [2] Desaceleracion media de frenado\n");
+    printf("     -> %.2f m/s^2  (%.2f g)\n\n", decel, decel_g);
 }
 
 // Determinación de la fuerza promedio del agua sobre el módulo durante el impacto
 void calcular_fuerza_amerizaje(const ParametrosReingreso *simulacion) {
-    double ec_impacto = 0.5 * MASA_ORION * pow(simulacion->v_impacto, 2);
+    double ec_impacto = 0.5 * MASA_ORION * pow(simulacion->vel_agua, 2);
     double trabajo_peso = MASA_ORION * GRAVEDAD * simulacion->hundimiento;
     double f_agua = (ec_impacto + trabajo_peso) / simulacion->hundimiento;
     double peso = MASA_ORION * GRAVEDAD;
     
-    printf("c. Fuerza promedio del agua: %.2f N (%.2f veces el peso)\n", f_agua, f_agua / peso);
+    printf(" [3] Fuerza promedio del agua (Amerizaje)\n");
+    printf("     -> %.2f N  (%.2f veces el peso de la nave)\n\n", f_agua, f_agua / peso);
 }
 
 // Evaluación del ángulo de reingreso respecto a los límites de seguridad de la trayectoria
 void analizar_angulo_reingreso(const ParametrosReingreso *simulacion) {
-    printf("d. Analisis del angulo de reingreso (%.2f grados): ", simulacion->angulo_reingreso);
+    printf(" [4] Analisis del angulo de reingreso (%.2f deg)\n", simulacion->angulo);
+    printf("     -> Estado: ");
     
-    if (simulacion->angulo_reingreso > ANG_MAX) {
-        printf("Desaceleracion excesiva (angulo muy empinado).\n");
-    } else if (simulacion->angulo_reingreso < ANG_MIN) {
-        printf("Rebote atmosferico (angulo muy plano).\n");
+    if (simulacion->angulo > ANG_MAX) {
+        printf("[ALERTA] Desaceleracion excesiva (superior a %.1f deg).\n", ANG_MAX);
+    } else if (simulacion->angulo < ANG_MIN) {
+        printf("[ALERTA] Rebote atmosferico (inferior a %.1f deg).\n", ANG_MIN);
     } else {
-        printf("Angulo dentro de la ventana de seguridad.\n");
+        printf("[ESTABLE] Dentro de la ventana de seguridad (%.1f - %.1f deg).\n", ANG_MIN, ANG_MAX);
     }
+    
+    printf("======================================================\n\n");
 }
-
-
 
 
 
 
 
 // Función controladora principal que instancia el estado e invoca los cálculos
-ParametrosReingreso ejecutar_simulacion(void) {
+void ejecutar_simulacion() {
+    // Función controladora principal que instancia el estado e invoca los cálculos
     ParametrosReingreso simulacion;
-
+    
     inicializar_parametros(&simulacion);
     calcular_trabajo_rozamiento(&simulacion);
     calcular_desaceleracion_media(&simulacion);
     calcular_fuerza_amerizaje(&simulacion);
     analizar_angulo_reingreso(&simulacion);
-
     return simulacion; // Retorna la estructura para registrarla en el historial del main
 }
