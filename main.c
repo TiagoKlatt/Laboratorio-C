@@ -47,6 +47,7 @@ int main() {
                 break;
                 
             case 0:
+                mostrar_reporte_final(hist_angulos, total);
                 printf("\nSaliendo del simulador de la Mision Artemis. ¡Hasta luego!\n");
                 break;
         }
