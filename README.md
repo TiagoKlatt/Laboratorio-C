@@ -12,8 +12,8 @@
 - **Barreto, Yamila Elisa** — Legajo: `31168`
 - **Klatt, Tiago David** — Legajo: `27866`
 - **Villalba, Luciano Alberto** — Legajo: `27843`
-- **[Apellido, Nombre]** — Legajo: `12345`
-  
+- **Iturri Lopez, Lisandro Samuel** — Legajo: `27921`
+- **Barboza, Alejandro Sebastian** — Legajo: `31102`
 
 ---
 
@@ -49,7 +49,7 @@ Las constantes principales serán:
 - `ANG_MIN`: `5.5`° (límite inferior de entrada atmosférica).
 - `ANG_MAX`: `7.0`° (límite superior de entrada atmosférica).
 
-También se definirá la estructura `ParametrosReingreso`, que permitirá agrupar toda la información de una simulación (`vel_ini`, `alt_ini`, `vel_para`, `alt_para`, `vel_agua`, `t_freno`, `hundimiento` y `angulo`), evitando pasar múltiples variables sueltas entre funciones.
+También se definirá la estructura `ParametrosReingreso`, que permitirá agrupar toda la información de una simulación (`vel_ini`, `alt_ini`, `vel_para`, `alt_para`, `v_impacto`, `t_freno`, `hundimiento` y `angulo`), evitando pasar múltiples variables sueltas entre funciones.
 
 Se utilizarán nombres descriptivos en español en lugar de abreviaturas cortas, como `v_i` o `h_i`, y se mantendrá el nombre `simulacion` para los punteros que reciban las funciones. De esta manera, se buscará que el código sea más claro y fácil de seguir.
 
@@ -83,6 +83,8 @@ Las funciones previstas serán:
 
 - **`analizar_angulo_reingreso(const ParametrosReingreso *simulacion)`**: evaluará el ángulo ingresado respecto a `ANG_MIN` y `ANG_MAX`. Si supera los `7,0°`, advertirá sobre una desaceleración excesiva por una entrada demasiado empinada; si es inferior a `5,5°`, alertará sobre un posible rebote atmosférico. Si se mantiene dentro del intervalo, indicará que la trayectoria se encuentra dentro de la ventana de seguridad.
 
+- **`mostrar_reporte_final(const double *hist_angulos, int total)`**: recibe el arreglo del historial mediante un puntero constante y muestra el reporte final de desempeño: cantidad de simulaciones realizadas, ángulo mínimo y máximo, ángulo promedio y cuántas simulaciones quedaron dentro de la ventana de seguridad (entre `ANG_MIN` y `ANG_MAX`).
+
 Las funciones que solamente necesiten consultar los datos recibirán punteros constantes (`const`), para proteger la integridad de la información almacenada.
 
 Al finalizar, `ejecutar_simulacion()` devolverá la estructura completa por valor, permitiendo conservar los parámetros utilizados en cada ejecución.
@@ -100,6 +102,25 @@ Junto con un contador `total`, que permitirá llevar el registro de las simulaci
 Cada vez que se complete una simulación, `main.c` recibirá la estructura devuelta por `ejecutar_simulacion()` y almacenará el ángulo utilizado (`sim.angulo`) en la siguiente posición disponible del arreglo `hist_angulos[total]`.
 
 De esta manera, el usuario podrá realizar diferentes pruebas con distintos ángulos de reingreso y consultar posteriormente el historial acumulado desde la segunda opción del menú.
+
+Al elegir la opción `0` para salir, `main.c` llama a `mostrar_reporte_final(hist_angulos, total)`, que resume todas las simulaciones de la sesión antes de cerrar el programa.
+
+### Diagrama de flujo
+
+```mermaid
+flowchart TD
+    A["main: menu principal"] --> B{"leer_entero 0 a 2"}
+    B -->|"1"| C["ejecutar_simulacion"]
+    C --> D["inicializar_parametros: pide tiempo, hundimiento y angulo con leer_flotante"]
+    D --> E["calculos: trabajo de rozamiento, desaceleracion, fuerza de amerizaje, analisis del angulo"]
+    E --> F["devuelve el struct: main guarda el angulo en hist_angulos y suma total"]
+    F --> A
+    B -->|"2"| G["muestra el historial de angulos"]
+    G --> A
+    B -->|"0"| H["mostrar_reporte_final"]
+    H --> I["Fin"]
+```
+
 
 ## Organización del Equipo y División de Tareas
 
@@ -120,13 +141,22 @@ Su tarea será diseñar casos de prueba, contrastar los resultados físicos medi
 
 ## Compilación y Ejecución
 
-El proyecto se desarrollará utilizando el estándar C99/C11 y la biblioteca matemática `<math.h>`. Para compilar con GCC en Linux o Unix será necesario enlazar dicha biblioteca mediante el parámetro `-lm`.
+El proyecto utiliza el estándar C11 y la biblioteca matemática `<math.h>`. Incluye un `Makefile` que compila los tres módulos y enlaza la biblioteca matemática con `-lm`.
 
-**Compilación:**
+**Compilación con make:**
+
+```bash
+make            # Linux / macOS
+mingw32-make    # Windows (MinGW)
+```
+
+**Compilación manual (alternativa):**
 
 ```bash
 gcc main.c artemis.c validaciones.c -o simulador_artemis -lm
 ```
+
+**Limpieza de archivos generados:** `make clean` (en Windows, `mingw32-make clean`).
 
 **Ejecución desde la terminal:**
 
@@ -140,12 +170,19 @@ simulador_artemis.exe
 
 ## Uso de Inteligencia Artificial
 
-Durante la planificación y el desarrollo del proyecto se contempla utilizar herramientas de Inteligencia Artificial Generativa (Gemini y ChatGPT) como apoyo técnico y de consulta.
+Durante el desarrollo del proyecto se utilizaron herramientas de Inteligencia Artificial Generativa como apoyo técnico y de consulta: Gemini y ChatGPT en la planificación y el diseño inicial, y Claude en la revisión del repositorio, el diagnóstico de errores y las tareas finales de integración. El código propuesto por las herramientas fue revisado, escrito en el repositorio, compilado y probado por el equipo.
 
-Su utilización estará orientada principalmente a los siguientes aspectos:
+### Registro detallado
 
-- **Legibilidad y nomenclatura:** consultar alternativas para nombrar variables y punteros, priorizando identificadores descriptivos como `vel_ini`, `simulacion`, `ec_ini` y `f_agua`, en lugar de abreviaturas poco claras.
-- **Control de entradas y búfer:** analizar el comportamiento de `scanf` ante entradas no numéricas y evaluar soluciones mediante funciones específicas como `limpiar_buffer()`.
-- **Presentación de resultados:** consultar propuestas para mejorar la organización visual, el espaciado y la claridad de los reportes de salida en consola.
+| Herramienta | Tarea | Consulta realizada (resumen) | Cómo se validó / adaptó |
+|---|---|---|---|
+| Gemini / ChatGPT | Legibilidad y nomenclatura | Alternativas para nombrar variables y punteros (`vel_ini`, `simulacion`, `ec_ini`, `f_agua`) | El equipo eligió los nombres y los unificó en `artemis.h` y `artemis.c` |
+| Gemini / ChatGPT | Control de entradas y búfer | Comportamiento de `scanf` ante entradas no numéricas y uso de `limpiar_buffer()` | Se evaluaron las soluciones y se probaron con letras y valores fuera de rango |
+| Gemini / ChatGPT | Presentación de resultados | Propuestas para ordenar y espaciar los reportes en consola | Se adaptó el formato de los `printf` |
+| Claude | Revisión del repositorio y diagnóstico de errores | Se pidió revisar el repositorio y explicar por qué no compilaba | Se identificó el tipo de retorno de `ejecutar_simulacion` y los nombres de campos; se corrigió y se compiló con `gcc -Wall -Wextra` |
+| Claude | Validaciones de entrada (`limpiar_buffer`, `leer_entero`, `leer_flotante`) | Cómo evitar bucles infinitos con `scanf` y cómo rechazar `nan`, `inf` y caracteres sobrantes | Claude propuso el código; el equipo lo escribió en `validaciones.c`, lo compiló y corrigió el `#include <math.h>` que faltaba |
+| Claude | Reporte final (`mostrar_reporte_final`) | Cómo resumir el historial usando un puntero a un arreglo | Claude propuso la función; el equipo la integró en `artemis.c` y `main.c` y comprobó el resultado ejecutando el programa |
+| Claude | Makefile | Cómo compilar los tres módulos con `make` | Se probó la compilación con `mingw32-make` |
+| Claude | Documentación | Ayuda para ordenar el README y el diagrama de flujo | El equipo revisó el texto y lo adaptó al estado real del proyecto |
 
-Las sugerencias obtenidas serán evaluadas y adaptadas según las necesidades del proyecto. Las decisiones de implementación, la comprensión del código y la verificación de los resultados estarán a cargo del equipo.
+Las sugerencias obtenidas fueron evaluadas y adaptadas según las necesidades del proyecto. Las decisiones de implementación, la comprensión del código y la verificación de los resultados estuvieron a cargo del equipo.
