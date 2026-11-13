@@ -7,14 +7,14 @@
 #include <math.h>
 #include "artemis.h"
 
-// Valores base preestablecidos para el reingreso de la nave 
+// Valores base preestablecidos para el reingreso de la nave
 void inicializar_parametros(ParametrosReingreso *simulacion) {
     simulacion->vel_ini = 11000.0;     // Velocidad hiperveloz inicial (m/s)
     simulacion->alt_ini = 120000.0;    // Altitud inicial de reingreso (m)
     simulacion->vel_para = 25.0;       // Rapidez en el momento de despliegue de paracaídas (m/s)
     simulacion->alt_para = 2500.0;     // Altitud de despliegue de paracaídas (m)
     simulacion->v_impacto = 8.0;       // Rapidez final segura al amerizar (m/s)
-    
+
     // Lectura de parámetros variables mediante validaciones
     printf("\n--- Configuracion de Parametros de Reingreso ---\n");
     simulacion->t_freno = leer_flotante("Ingrese duracion de desaceleracion en seg (ej. 400.0): ", 1.0, 10000.0);
@@ -27,9 +27,9 @@ void calcular_trabajo_rozamiento(const ParametrosReingreso *simulacion) {
     double ep_ini = MASA_ORION * GRAVEDAD * simulacion->alt_ini;
     double ec_fin = 0.5 * MASA_ORION * pow(simulacion->vel_para, 2);
     double ep_fin = MASA_ORION * GRAVEDAD * simulacion->alt_para;
-    
+
     double w_roz = (ec_fin + ep_fin) - (ec_ini + ep_ini);
-    
+
     printf("\na. Trabajo total por rozamiento (Wroz): %.2e Joules\n", w_roz);
 
 }
@@ -37,26 +37,45 @@ void calcular_trabajo_rozamiento(const ParametrosReingreso *simulacion) {
 void calcular_desaceleracion_media(const ParametrosReingreso *simulacion) {
     double decel = fabs((simulacion->vel_para - simulacion->vel_ini) / simulacion->t_freno);
     double decel_g = decel / GRAVEDAD;
-    
+
     printf("b. Desaceleracion media: %.2f m/s^2  (%.2f g)\n", decel, decel_g);
-  
+
 }
 
+/ Determinación de la fuerza promedio del agua sobre el módulo durante el impacto
+void calcular_fuerza_amerizaje(const ParametrosReingreso *simulacion) {
 
+    double ec_impacto = 0.5 * MASA_ORION * pow(simulacion->vel_agua, 2);
+    double trabajo_peso = MASA_ORION * GRAVEDAD * simulacion->hundimiento;
+    double f_agua = (ec_impacto + trabajo_peso) / simulacion->hundimiento;
+    double peso = MASA_ORION * GRAVEDAD;
 
+    printf("c. Fuerza promedio del agua: %.2f N (%.2f veces el peso)\n", f_agua, f_agua / peso);
+}
+ // Evaluación del ángulo de reingreso respecto a los límites de seguridad de la trayectoria
+void analizar_angulo_reingreso(const ParametrosReingreso *simulacion) {
 
+    printf("d. Analisis del angulo de reingreso (%.2f grados): ", simulacion->angulo);
 
-
-
+    if (simulacion->angulo > ANG_MAX) {
+        printf("Desaceleracion excesiva (angulo muy empinado).\n");
+    } else if (simulacion->angulo < ANG_MIN) {
+        printf("Rebote atmosferico (angulo muy plano).\n");
+    } else {
+        printf("Angulo dentro de la ventana de seguridad.\n");
+    }
+}
 
 // Función controladora principal que instancia el estado e invoca los cálculos
 void ejecutar_simulacion() {
-    
+
     ParametrosReingreso simulacion;
 
     inicializar_parametros(&simulacion);
     calcular_trabajo_rozamiento(&simulacion);
     calcular_desaceleracion_media(&simulacion);
+    calcular_fuerza_amerizaje(&simulacion);
+    analizar_angulo_reingreso(&simulacion);
 
     return simulacion; // Retorna la estructura para registrarla en el historial del main
 }
