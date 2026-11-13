@@ -49,11 +49,11 @@ void calcular_desaceleracion_media(const ParametrosReingreso *simulacion) {
 
 // Determinación de la fuerza promedio del agua sobre el módulo durante el impacto
 void calcular_fuerza_amerizaje(const ParametrosReingreso *simulacion) {
-    double ec_impacto = 0.5 * MASA_ORION * pow(simulacion->vel_agua, 2);
+    double ec_impacto = 0.5 * MASA_ORION * pow(simulacion->v_impacto, 2);
     double trabajo_peso = MASA_ORION * GRAVEDAD * simulacion->hundimiento;
     double f_agua = (ec_impacto + trabajo_peso) / simulacion->hundimiento;
     double peso = MASA_ORION * GRAVEDAD;
-    
+
     printf(" [3] Fuerza promedio del agua (Amerizaje)\n");
     printf("     -> %.2f N  (%.2f veces el peso de la nave)\n\n", f_agua, f_agua / peso);
 }
