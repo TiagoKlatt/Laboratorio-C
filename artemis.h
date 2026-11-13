@@ -16,7 +16,7 @@ typedef struct {
     double v_impacto; // 8.0 m/s - Impacto de amerizaje.
     double t_freno;
     double hundimiento;
-    double angulo_reingreso;
+    double angulo;
 } ParametrosReingreso;
 
 void inicializar_parametros(ParametrosReingreso *simulacion);
