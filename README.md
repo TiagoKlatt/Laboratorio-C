@@ -49,7 +49,7 @@ Las constantes principales serán:
 - `ANG_MIN`: `5.5`° (límite inferior de entrada atmosférica).
 - `ANG_MAX`: `7.0`° (límite superior de entrada atmosférica).
 
-También se definirá la estructura `ParametrosReingreso`, que permitirá agrupar toda la información de una simulación (`vel_ini`, `alt_ini`, `vel_para`, `alt_para`, `vel_agua`, `t_freno`, `hundimiento` y `angulo`), evitando pasar múltiples variables sueltas entre funciones.
+También se definirá la estructura `ParametrosReingreso`, que permitirá agrupar toda la información de una simulación (`vel_ini`, `alt_ini`, `vel_para`, `alt_para`, `v_impacto`, `t_freno`, `hundimiento` y `angulo`), evitando pasar múltiples variables sueltas entre funciones.
 
 Se utilizarán nombres descriptivos en español en lugar de abreviaturas cortas, como `v_i` o `h_i`, y se mantendrá el nombre `simulacion` para los punteros que reciban las funciones. De esta manera, se buscará que el código sea más claro y fácil de seguir.
 
@@ -83,6 +83,8 @@ Las funciones previstas serán:
 
 - **`analizar_angulo_reingreso(const ParametrosReingreso *simulacion)`**: evaluará el ángulo ingresado respecto a `ANG_MIN` y `ANG_MAX`. Si supera los `7,0°`, advertirá sobre una desaceleración excesiva por una entrada demasiado empinada; si es inferior a `5,5°`, alertará sobre un posible rebote atmosférico. Si se mantiene dentro del intervalo, indicará que la trayectoria se encuentra dentro de la ventana de seguridad.
 
+- **`mostrar_reporte_final(const double *hist_angulos, int total)`**: recibe el arreglo del historial mediante un puntero constante y muestra el reporte final de desempeño: cantidad de simulaciones realizadas, ángulo mínimo y máximo, ángulo promedio y cuántas simulaciones quedaron dentro de la ventana de seguridad (entre `ANG_MIN` y `ANG_MAX`).
+
 Las funciones que solamente necesiten consultar los datos recibirán punteros constantes (`const`), para proteger la integridad de la información almacenada.
 
 Al finalizar, `ejecutar_simulacion()` devolverá la estructura completa por valor, permitiendo conservar los parámetros utilizados en cada ejecución.
@@ -100,6 +102,25 @@ Junto con un contador `total`, que permitirá llevar el registro de las simulaci
 Cada vez que se complete una simulación, `main.c` recibirá la estructura devuelta por `ejecutar_simulacion()` y almacenará el ángulo utilizado (`sim.angulo`) en la siguiente posición disponible del arreglo `hist_angulos[total]`.
 
 De esta manera, el usuario podrá realizar diferentes pruebas con distintos ángulos de reingreso y consultar posteriormente el historial acumulado desde la segunda opción del menú.
+
+Al elegir la opción `0` para salir, `main.c` llama a `mostrar_reporte_final(hist_angulos, total)`, que resume todas las simulaciones de la sesión antes de cerrar el programa.
+
+### Diagrama de flujo
+
+```mermaid
+flowchart TD
+    A["main: menu principal"] --> B{"leer_entero 0 a 2"}
+    B -->|"1"| C["ejecutar_simulacion"]
+    C --> D["inicializar_parametros: pide tiempo, hundimiento y angulo con leer_flotante"]
+    D --> E["calculos: trabajo de rozamiento, desaceleracion, fuerza de amerizaje, analisis del angulo"]
+    E --> F["devuelve el struct: main guarda el angulo en hist_angulos y suma total"]
+    F --> A
+    B -->|"2"| G["muestra el historial de angulos"]
+    G --> A
+    B -->|"0"| H["mostrar_reporte_final"]
+    H --> I["Fin"]
+```
+
 
 ## Organización del Equipo y División de Tareas
 
