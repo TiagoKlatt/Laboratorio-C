@@ -2,6 +2,13 @@
 #include <stdio.h>
 #include "validaciones.h"
 
+void limpiar_buffer(void) {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {
+        // se descartan los caracteres sobrantes
+    }
+}
+
 double leer_flotante(const char *mensaje, double min, double max) {
     double valor;
     int leidos;
