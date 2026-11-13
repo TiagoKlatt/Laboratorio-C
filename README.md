@@ -109,15 +109,15 @@ Al elegir la opción `0` para salir, `main.c` llama a `mostrar_reporte_final(his
 
 ```mermaid
 flowchart TD
-    A["main: menu principal"] --> B{"leer_entero 0 a 2"}
-    B -->|"1"| C["ejecutar_simulacion"]
-    C --> D["inicializar_parametros: pide tiempo, hundimiento y angulo con leer_flotante"]
-    D --> E["calculos: trabajo de rozamiento, desaceleracion, fuerza de amerizaje, analisis del angulo"]
-    E --> F["devuelve el struct: main guarda el angulo en hist_angulos y suma total"]
+    A["main:<br/>menu principal"] --> B{"leer_entero<br/>opcion 0 a 2"}
+    B -->|"1"| C["ejecutar_<br/>simulacion"]
+    C --> D["inicializar_<br/>parametros:<br/>pide tiempo,<br/>hundimiento<br/>y angulo"]
+    D --> E["calculos:<br/>Wroz,<br/>desaceleracion,<br/>fuerza de<br/>amerizaje,<br/>analisis<br/>del angulo"]
+    E --> F["devuelve<br/>el struct:<br/>main guarda<br/>el angulo<br/>y suma total"]
     F --> A
-    B -->|"2"| G["muestra el historial de angulos"]
+    B -->|"2"| G["muestra el<br/>historial<br/>de angulos"]
     G --> A
-    B -->|"0"| H["mostrar_reporte_final"]
+    B -->|"0"| H["mostrar_<br/>reporte_final"]
     H --> I["Fin"]
 ```
 
