@@ -12,8 +12,8 @@
 - **Barreto, Yamila Elisa** — Legajo: `31168`
 - **Klatt, Tiago David** — Legajo: `27866`
 - **Villalba, Luciano Alberto** — Legajo: `27843`
-- **[Apellido, Nombre]** — Legajo: `12345`
-  
+- **Iturri Lopez, Lisandro Samuel** — Legajo: `27921`
+- **Barboza, Alejandro Sebastian** — Legajo: `31102`
 
 ---
 
@@ -141,13 +141,22 @@ Su tarea será diseñar casos de prueba, contrastar los resultados físicos medi
 
 ## Compilación y Ejecución
 
-El proyecto se desarrollará utilizando el estándar C99/C11 y la biblioteca matemática `<math.h>`. Para compilar con GCC en Linux o Unix será necesario enlazar dicha biblioteca mediante el parámetro `-lm`.
+El proyecto utiliza el estándar C11 y la biblioteca matemática `<math.h>`. Incluye un `Makefile` que compila los tres módulos y enlaza la biblioteca matemática con `-lm`.
 
-**Compilación:**
+**Compilación con make:**
+
+```bash
+make            # Linux / macOS
+mingw32-make    # Windows (MinGW)
+```
+
+**Compilación manual (alternativa):**
 
 ```bash
 gcc main.c artemis.c validaciones.c -o simulador_artemis -lm
 ```
+
+**Limpieza de archivos generados:** `make clean` (en Windows, `mingw32-make clean`).
 
 **Ejecución desde la terminal:**
 
@@ -161,12 +170,19 @@ simulador_artemis.exe
 
 ## Uso de Inteligencia Artificial
 
-Durante la planificación y el desarrollo del proyecto se contempla utilizar herramientas de Inteligencia Artificial Generativa (Gemini y ChatGPT) como apoyo técnico y de consulta.
+Durante el desarrollo del proyecto se utilizaron herramientas de Inteligencia Artificial Generativa como apoyo técnico y de consulta: Gemini y ChatGPT en la planificación y el diseño inicial, y Claude en la revisión del repositorio, el diagnóstico de errores y las tareas finales de integración. El código propuesto por las herramientas fue revisado, escrito en el repositorio, compilado y probado por el equipo.
 
-Su utilización estará orientada principalmente a los siguientes aspectos:
+### Registro detallado
 
-- **Legibilidad y nomenclatura:** consultar alternativas para nombrar variables y punteros, priorizando identificadores descriptivos como `vel_ini`, `simulacion`, `ec_ini` y `f_agua`, en lugar de abreviaturas poco claras.
-- **Control de entradas y búfer:** analizar el comportamiento de `scanf` ante entradas no numéricas y evaluar soluciones mediante funciones específicas como `limpiar_buffer()`.
-- **Presentación de resultados:** consultar propuestas para mejorar la organización visual, el espaciado y la claridad de los reportes de salida en consola.
+| Herramienta | Tarea | Consulta realizada (resumen) | Cómo se validó / adaptó |
+|---|---|---|---|
+| Gemini / ChatGPT | Legibilidad y nomenclatura | Alternativas para nombrar variables y punteros (`vel_ini`, `simulacion`, `ec_ini`, `f_agua`) | El equipo eligió los nombres y los unificó en `artemis.h` y `artemis.c` |
+| Gemini / ChatGPT | Control de entradas y búfer | Comportamiento de `scanf` ante entradas no numéricas y uso de `limpiar_buffer()` | Se evaluaron las soluciones y se probaron con letras y valores fuera de rango |
+| Gemini / ChatGPT | Presentación de resultados | Propuestas para ordenar y espaciar los reportes en consola | Se adaptó el formato de los `printf` |
+| Claude | Revisión del repositorio y diagnóstico de errores | Se pidió revisar el repositorio y explicar por qué no compilaba | Se identificó el tipo de retorno de `ejecutar_simulacion` y los nombres de campos; se corrigió y se compiló con `gcc -Wall -Wextra` |
+| Claude | Validaciones de entrada (`limpiar_buffer`, `leer_entero`, `leer_flotante`) | Cómo evitar bucles infinitos con `scanf` y cómo rechazar `nan`, `inf` y caracteres sobrantes | Claude propuso el código; el equipo lo escribió en `validaciones.c`, lo compiló y corrigió el `#include <math.h>` que faltaba |
+| Claude | Reporte final (`mostrar_reporte_final`) | Cómo resumir el historial usando un puntero a un arreglo | Claude propuso la función; el equipo la integró en `artemis.c` y `main.c` y comprobó el resultado ejecutando el programa |
+| Claude | Makefile | Cómo compilar los tres módulos con `make` | Se probó la compilación con `mingw32-make` |
+| Claude | Documentación | Ayuda para ordenar el README y el diagrama de flujo | El equipo revisó el texto y lo adaptó al estado real del proyecto |
 
-Las sugerencias obtenidas serán evaluadas y adaptadas según las necesidades del proyecto. Las decisiones de implementación, la comprensión del código y la verificación de los resultados estarán a cargo del equipo.
+Las sugerencias obtenidas fueron evaluadas y adaptadas según las necesidades del proyecto. Las decisiones de implementación, la comprensión del código y la verificación de los resultados estuvieron a cargo del equipo.
